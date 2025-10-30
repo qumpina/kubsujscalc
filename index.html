@@ -59,6 +59,12 @@
             font-size: 18px;
             font-weight: bold;
             text-align: center;
+            background-color: #f8f9fa;
+            color: #6c757d;
+        }
+        .result.calculated {
+            background-color: #e8f5e9;
+            color: #155724;
         }
         .hidden {
             display: none;
@@ -68,24 +74,11 @@
             font-size: 14px;
             margin-top: 5px;
         }
-        .calculate-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: black;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background-color 0.3s;
+        .input-valid {
+            border-color: #28a745;
         }
-        .calculate-btn:hover{
-            background-color: green;
-        }
-        .calculate-btn:disabled {
-            background-color: #6c757d;
-            cursor: not-allowed;
+        .input-invalid {
+            border-color: #dc3545;
         }
     </style>
 </head>
@@ -112,7 +105,7 @@
                 </div>
                 <div class="radio-option">
                     <input type="radio" id="type3" name="serviceType" value="custom">
-                    <label for="type3">Особая услуга - 1500 руб.</label>
+                    <label for="type3">Кастомная услуга - 1500 руб.</label>
                 </div>
             </div>
         </div>
@@ -133,10 +126,8 @@
             </div>
         </div>
         
-        <button class="calculate-btn" id="calculateBtn">Рассчитать стоимость</button>
-        
         <div class="result" id="result">
-            Выполните расчет стоимости
+            Общая стоимость: 1 000 руб.
         </div>
     </div>
 

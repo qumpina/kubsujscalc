@@ -1,18 +1,18 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const basePrices = {
-        basic: 1000,
-        premium: 2000,
-        custom: 1500
-    };
+const basePrices = {
+    basic: 1000,
+    premium: 2000,
+    custom: 1500
+};
 
-    const optionPrices = {
-        standard: 0,
-        express: 500,
-        vip: 1000
-    };
+const optionPrices = {
+    standard: 0,
+    express: 500,
+    vip: 1000
+};
 
-    const propertyPrice = 300;
+const propertyPrice = 300;
 
+function initCalculator() {
     const quantityInput = document.getElementById('quantity');
     const serviceTypeRadios = document.querySelectorAll('input[name="serviceType"]');
     const optionsGroup = document.getElementById('optionsGroup');
@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const propertyGroup = document.getElementById('propertyGroup');
     const propertyCheckbox = document.getElementById('property');
     const resultElement = document.getElementById('result');
-    const calculateBtn = document.getElementById('calculateBtn');
     const errorDiv = document.getElementById('quantityError');
 
     const numberRegex = /^\d+$/;
@@ -30,43 +29,45 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (value === '') {
             showError('Пожалуйста, введите количество');
+            quantityInput.classList.add('input-invalid');
+            quantityInput.classList.remove('input-valid');
             return false;
         }
         
         if (!numberRegex.test(value)) {
             showError('Введите корректное количество (только целые положительные числа)');
+            quantityInput.classList.add('input-invalid');
+            quantityInput.classList.remove('input-valid');
             return false;
         }
         
         const quantity = parseInt(value);
         if (quantity <= 0) {
             showError('Количество должно быть больше 0');
+            quantityInput.classList.add('input-invalid');
+            quantityInput.classList.remove('input-valid');
             return false;
         }
         
         hideError();
+        quantityInput.classList.remove('input-invalid');
+        quantityInput.classList.add('input-valid');
         return true;
     }
 
     function showError(message) {
         errorDiv.textContent = message;
         errorDiv.classList.remove('hidden');
-        calculateBtn.disabled = true;
     }
 
     function hideError() {
         errorDiv.classList.add('hidden');
-        calculateBtn.disabled = false;
-    }
-
-    function resetResult() {
-        resultElement.textContent = 'Выполните расчет стоимости';
-        resultElement.style.color = '#6c757d';
-        resultElement.style.backgroundColor = '#f8f9fa';
     }
 
     function calculateTotal() {
         if (!validateInput()) {
+            resultElement.textContent = 'Введите корректное количество';
+            resultElement.classList.remove('calculated');
             return;
         }
         
@@ -86,8 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         resultElement.textContent = `Общая стоимость: ${total.toLocaleString('ru-RU')} руб.`;
-        resultElement.style.color = '#155724';
-        resultElement.style.backgroundColor = '#e8f5e9';
+        resultElement.classList.add('calculated');
     }
 
     function updateFormVisibility() {
@@ -111,29 +111,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
         }
         
-        resetResult();
+        calculateTotal();
     }
 
-    quantityInput.addEventListener('input', validateInput);
-    calculateBtn.addEventListener('click', calculateTotal);
+    function handleInput() {
+        validateInput();
+        calculateTotal();
+    }
+
+    quantityInput.addEventListener('input', handleInput);
+    quantityInput.addEventListener('blur', handleInput);
 
     serviceTypeRadios.forEach(radio => {
         radio.addEventListener('change', function() {
             updateFormVisibility();
-            validateInput();
+            handleInput();
         });
     });
 
-    optionsSelect.addEventListener('change', function() {
-        validateInput();
-        resetResult();
-    });
+    optionsSelect.addEventListener('change', handleInput);
+    propertyCheckbox.addEventListener('change', handleInput);
 
-    propertyCheckbox.addEventListener('change', function() {
-        validateInput();
-        resetResult();
-    });
     updateFormVisibility();
     hideError();
-    resetResult();
-});
+    calculateTotal();
+}
+
+document.addEventListener('DOMContentLoaded', initCalculator);
