@@ -13,6 +13,8 @@ const optionPrices = {
 const propertyPrice = 300;
 
 function initCalculator() {
+    console.log('Initializing calculator...');
+    
     const quantityInput = document.getElementById('quantity');
     const serviceTypeRadios = document.querySelectorAll('input[name="serviceType"]');
     const optionsGroup = document.getElementById('optionsGroup');
@@ -21,6 +23,11 @@ function initCalculator() {
     const propertyCheckbox = document.getElementById('property');
     const resultElement = document.getElementById('result');
     const errorDiv = document.getElementById('quantityError');
+
+    if (!quantityInput || !optionsGroup || !propertyGroup) {
+        console.error('Required elements not found');
+        return;
+    }
 
     const numberRegex = /^\d+$/;
 
@@ -135,6 +142,12 @@ function initCalculator() {
     updateFormVisibility();
     hideError();
     calculateTotal();
+    
+    console.log('Calculator initialized successfully');
 }
 
-document.addEventListener('DOMContentLoaded', initCalculator);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCalculator);
+} else {
+    initCalculator();
+}
